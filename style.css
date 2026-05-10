@@ -27,14 +27,23 @@ h1 {
   padding-bottom: 0.5rem;
 }
 
+h2 {
+  margin-top: 2rem;
+  color: #7a4b2a;
+}
+
+h3 {
+  margin-top: 1.5rem;
+}
+
 section, p {
   margin-bottom: 1rem;
 }
 
 pre {
-  background: #f1eee8;
+  background: #f0f0f0;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
   overflow-x: auto;
 }
 
