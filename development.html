@@ -59,8 +59,8 @@ end </code></pre>
 I implemented the reusable dialogue management system by expanding the original
 <code>DialogueHandler</code> stub that Aubrey and Ian started into a central handler
 for dialogue flow. I created the dialogue abstraction using <code>DialogueList</code>,
-implemented state tracking through the <code>Seen</code> table, added conditional
-triggering logic, and integrated dialogue behavior into the game loop. I also rewrote
+implemented state tracking through the <code>Seen</code> table, added conditional 
+logic, and integrated dialogue behavior into the game loop. I also rewrote
 previously repetitive conditional checks into reusable looping logic and revised the
 structure based on teammate pull request feedback.
 </p>
@@ -84,11 +84,87 @@ This abstraction also separates responsibilities across the codebase.
 <code>DialogueHandler</code> manages dialogue state, textbox progression, conditional
 dialogue triggers, and click behavior, while <code>main.lua</code> only calls the handler
 during update, draw, and input events. This separation improved readability and reduced
-coupling between gameplay logic and interface behavior. Revisions made through teammate
+overlap between gameplay logic and interface behavior. Revisions made through teammate
 feedback also helped ensure that the dialogue system behaved more consistently during
 normal gameplay and did not interfere with testing scenarios.
 </p>
 <section>
+
+<section>
+  <h2>Medium-Scale Architecture</h2>
+
+<h3>Where to Find My Work</h3>
+<p>
+This sample is located in the <strong>PaperQuest</strong> repository in
+<code>handlers/drawingHandler.lua</code>, <code>items_list.lua</code>,
+<code>ui_list.lua</code>, and <code>classes/meeple_button.lua</code>.
+It was submitted through PR #119, “UI layout overhaul + meeple integration.”
+Relevant sections include <code>drawingHandler.lua</code> lines 26–118,
+<code>items_list.lua</code> lines 32–36, and <code>ui_list.lua</code> lines 22–30.
+</p>
+
+<h3>Visual Samples</h3>
+<figure>
+  <img src="images/early-ui.png" alt="Early sprint version of the PaperQuest interface">
+  <figcaption>Earlier UI layout before meeple integration.</figcaption>
+</figure>
+
+<figure>
+  <img src="images/final-ui.png" alt="Final PaperQuest interface with meeple systems integrated">
+  <figcaption>Final UI layout with meeple cost, factory count, and forest count integrated.</figcaption>
+</figure>
+
+<h3>My Contributions</h3>
+<p>
+I designed and implemented the meeple interface integration. I created the meeple UI assets
+in Canva, imported them into the project, repositioned interface elements, updated button
+configuration values, and connected the new visual system across the rendering and item-list
+files. This was group work, but there are changes in the PR #119 history that show my direct
+contributions.
+</p>
+
+<h3>Code Samples</h3>
+<pre><code>if (OtherItemButtons.meeple.visible) then
+    love.graphics.draw(UI.meepleCost, 250, 246)
+    love.graphics.draw(UI.meepleFactoryCount, 264, 362)
+    love.graphics.draw(UI.meepleForestCount, 685, 362)
+    love.graphics.draw(UI.decor.meeple, 276, 477)
+    love.graphics.draw(UI.decor.meeple, 697, 471)
+end</code></pre>
+
+<pre><code>meeple = MeepleButton(
+    250, 246,
+    277, 67,
+    true,
+    OtherItems.meeple
+),</code></pre>
+
+<pre><code>meepleCost =
+    love.graphics.newImage("assets/buttons/meeple_cost.png"),
+
+meepleFactoryCount =
+    love.graphics.newImage("assets/buttons/meeple_count_factory.png"),</code></pre>
+
+<h3>Write-Up</h3>
+<p>
+This sample demonstrates medium-scale architecture because it shows how our project separates
+the front-end interface into distinct components instead of placing all visual and interaction
+logic inside <code>main.lua</code>. The architecture uses separate files for rendering,
+asset uploading, and button information/behavior. <code>drawingHandler.lua</code>
+controls what appears on screen, <code>ui_list.lua</code> loads all the image assets,
+<code>items_list.lua</code> defines button positions and visibility, and
+<code>meeple_button.lua</code> handles meeple-specific interaction behavior.
+</p>
+
+<p>
+This structure was necessary because our game PaperQuest is a Love2D idle game with many visual systems
+that change as the player progresses. Love2D does not provide a built-in interface layout system,
+so we had to organize our own architecture for drawing images, tracking clickable regions, and
+displaying changing resource values. By separating these responsibilities, I was able to redesign
+the UI and add the meeple system without rewriting unrelated gameplay logic. The before-and-after
+screenshots show how this architecture supported a clearer, more expandable interface.
+</p>
+</section>
 
 </body>
 </html>
