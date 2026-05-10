@@ -75,9 +75,9 @@ structure based on teammate pull request feedback.
 <h3>Write-Up</h3>
 <p>
 The <code>DialogueHandler</code> demonstrates medium-scale abstraction because it
-centralizes a full gameplay subsystem into a reusable handler instead of scattering
-dialogue logic throughout <code>main.lua</code>. Before the rewrite, dialogue progression
-depended on repeated hardcoded conditional statements. I replaced this with a
+centralizes a subsystem of the gameplay into a reusable handler instead of having the
+dialogue logic scattered throughout <code>main.lua</code>. Before the rewrite, dialogue 
+progression depended on repeated hardcoded conditional statements. I replaced this with a
 <code>DialogueList</code> table containing reusable dialogue entries with shared
 properties such as <code>key</code>, <code>file</code>, and <code>condition</code>.
 The handler then loops through these entries using <code>pairs()</code> to determine
@@ -89,11 +89,11 @@ than rewriting large conditional blocks.
 <p>
 This abstraction also separates responsibilities across the codebase.
 <code>DialogueHandler</code> manages dialogue state, textbox progression, conditional
-dialogue triggers, and click behavior, while <code>main.lua</code> only calls the handler
-during update, draw, and input events. This separation improved readability and reduced
+dialogue, and click behavior, while <code>main.lua</code> only calls the handler
+when we update, draw, and input. This separation improved readability and reduced
 overlap between gameplay logic and interface behavior. Revisions made through teammate
 feedback also helped ensure that the dialogue system behaved more consistently during
-normal gameplay and did not interfere with testing scenarios.
+normal gameplay.
 </p>
 <section>
 
