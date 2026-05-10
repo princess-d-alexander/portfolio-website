@@ -21,6 +21,8 @@
   <h2>Medium-Scale Abstraction</h2>
 
   <h3>Code Sample</h3>
+
+  <p><strong>handlers/dialogueHandler.lua</strong></p>
   <pre><code>startDialogue = function(fileName, key)
     DialogueHandler.TextBox =
         TextBox(0, 475, 800, 125, fileName, 0.1)
@@ -32,7 +34,8 @@
         DialogueHandler.Seen[key] = true
     end
 end,</code></pre>
-
+  
+  <p><strong>handlers/dialogueHandler.lua</strong></p>
   <pre><code> if not DialogueHandler.Seen.firstWeapon then
     for _, weapon in pairs(WeaponItems) do
         if weapon.amt > 0 then
@@ -44,6 +47,10 @@ end,</code></pre>
         end
     end
 end </code></pre>
+
+  <p><strong>main.lua</strong></p>
+  <pre><code>DialogueHandler.updateText(dt)
+  DialogueHandler.draw()</code></pre>
 
   <h3>Where to Find My Work</h3>
   <p>
@@ -125,6 +132,8 @@ contributions.
 </p>
 
 <h3>Code Samples</h3>
+
+<p><strong>drawingHandler.lua</strong></p>
 <pre><code>if (OtherItemButtons.meeple.visible) then
     love.graphics.draw(UI.meepleCost, 250, 246)
     love.graphics.draw(UI.meepleFactoryCount, 264, 362)
@@ -133,6 +142,7 @@ contributions.
     love.graphics.draw(UI.decor.meeple, 697, 471)
 end</code></pre>
 
+<p><strong>items_list.lua</strong></p>
 <pre><code>meeple = MeepleButton(
     250, 246,
     277, 67,
@@ -140,6 +150,7 @@ end</code></pre>
     OtherItems.meeple
 ),</code></pre>
 
+<p><strong>ui_list.lua</strong></p>
 <pre><code>meepleCost =
     love.graphics.newImage("assets/buttons/meeple_cost.png"),
 
