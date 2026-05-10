@@ -1,4 +1,12 @@
-<nav>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Development</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
   <a href="index.html">Home</a>
   <a href="development.html">Development</a>
   <a href="verification.html">Verification</a>
@@ -6,3 +14,183 @@
   <a href="engineering.html">Engineering</a>
   <a href="advanced.html">Advanced</a>
 </nav>
+
+<h1>Verification</h1>
+
+<section>
+  <h2>Testing Strategies</h2>
+
+  <h3>Where to Find My Work</h3>
+  <p>
+    This sample is located in the <strong>PaperGame</strong> repository on the
+    <code>testing-suite-princess</code> branch. The main files are
+    <code>handlers/testingHandler.lua</code>, <code>items_list.lua</code>,
+    <code>tests/PrincessMeepleUITest.txt</code>,
+    <code>tests/PrincessNegativeRegressionTest.txt</code>, and
+    <code>tests/PrincessProductionLimitTest.txt</code>.
+  </p>
+
+  <h3>My Contributions</h3>
+  <p>
+    I created three new scenario-based test files and added validation checks for
+    meeple progression and production behavior. I used the existing testing system
+    built by my teammates as a foundation, but the new test states, testing buttons,
+    and assertions discussed here were my own contributions.
+  </p>
+
+  <h3>Code Samples</h3>
+
+  <p><strong>tests/PrincessMeepleUITest.txt</strong></p>
+  <pre><code>1000
+1000
+0
+0
+3
+2
+1
+100
+3
+3
+3
+0
+0
+0
+0
+1000
+1000
+1
+0</code></pre>
+
+  <p><strong>handlers/testingHandler.lua</strong></p>
+  <pre><code>assert(
+    forestMeeples + factoryMeeples <= totalMeeples,
+    "Assigned meeples should not exceed total meeples."
+)</code></pre>
+
+  <p><strong>items_list.lua</strong></p>
+  <pre><code>PrincessMeepleUI =
+    TestingButton(
+        800, 550,
+        140, 50,
+        "PrincessMeepleUITest.txt"
+    )</code></pre>
+
+  <h3>Description</h3>
+
+  <p>
+  The component I tested was the meeple progression and production system. Meeples are
+  worker units assigned either to the forest or the factory, so they directly affect wood
+  production, paper production, and overall gameplay. The tests I created are
+  scenario-based regression tests that consider predefined save states and verify that the
+  game still behaves correctly after new systems or interface changes are added. Each test
+  file stores a complete gameplay state as numerical values loaded at runtime. For example,
+  in <code>PrincessMeepleUITest.txt</code>, the values <code>3</code>, <code>2</code>,
+  and <code>1</code> represent the total number of meeples, forest meeples, and factory
+  meeples. This creates a valid progression state where the assigned meeples equal the
+  total number available. The assertions in <code>testingHandler.lua</code> then verify
+  that assigned meeples never exceed the total meeple count and that production
+  multipliers derived from those values remain logically valid.
+  </p>
+
+  <p>
+  The other tests target different gameplay conditions.
+  <code>PrincessNegativeRegressionTest.txt</code> creates an empty starting state where all
+  resource values are zero or positive so the game can verify that no invalid negative or
+  nil values appear during initialization. 
+  <code>PrincessProductionLimitTest.txt</code> creates a production scenario with low
+  wood values and active paper production to verify that the game does not allow
+  paper generation beyond the available wood supply. Together, these tests cover
+  progression consistency, production calculations, and save-state validation. I did not
+  automate tests for rendering correctness, hitbox alignment, or UI layout because those
+  systems depend on graphical output inside the Love2D engine and were more effectively
+  verified through manual interaction and visual debugging during gameplay.
+  </p>
+  
+</section>
+
+<section>
+  <h2>Testing Infrastructure</h2>
+
+  <h3>Where to Find My Work</h3>
+  <p>
+    This sample is located in the <strong>PaperGame</strong> repository on the
+    <code>testing-suite-princess</code> branch. The relevant files are
+    <code>handlers/testingHandler.lua</code>, <code>items_list.lua</code>, and the
+    custom test save files in the <code>tests</code> folder.
+  </p>
+
+  <h3>My Contributions</h3>
+  <p>
+    I expanded the existing testing mode by adding new selectable test
+    scenarios and reusable validation assertions. I integrated my custom save-state
+    tests into the testing interface so they could be loaded directly from inside the
+    game.
+  </p>
+
+  <h3>Code Samples</h3>
+
+  <p><strong>handlers/testingHandler.lua</strong></p>
+  <pre><code>assertValidNonnegative = function(value, label)
+    assert(value ~= nil,
+        label .. " should not be nil.")
+
+    assert(type(value) == "number",
+        label .. " should be a number.")
+
+    assert(value >= 0,
+        label .. " should never be negative.")
+end,</code></pre>
+
+  <p><strong>handlers/testingHandler.lua</strong></p>
+  <pre><code>local forestMultiplier = forestMeeples + 1
+local factoryMultiplier = factoryMeeples + 1
+
+assert(
+    forestMultiplier >= 1,
+    "Forest meeple multiplier should be at least 1."
+)
+
+assert(
+    factoryMultiplier >= 1,
+    "Factory meeple multiplier should be at least 1."
+)</code></pre>
+
+  <p><strong>items_list.lua</strong></p>
+  <pre><code>PrincessProduction =
+    TestingButton(
+        950, 450,
+        140, 50,
+        "PrincessProductionLimitTest.txt"
+    )</code></pre>
+
+  <h3>Description</h3>
+
+  <p>
+  The project’s testing infrastructure is built around an in-game testing mode implemented
+  through <code>testingHandler.lua</code>. Instead of manually editing save files or
+  changing gameplay variables during debugging, we can load predefined gameplay
+  states directly through clickable testing buttons inside the game. I expanded this
+  infrastructure designed by Aubrey & Ian by integrating my own save-state tests into the 
+  testing interface and adding reusable assertion logic for meeple progression systems. 
+  The testing buttons added in <code>items_list.lua</code> allow the game to instantly load 
+  the testing scenarios I created. This made testing close to “one-click” because one could 
+  enter testing mode, select a scenario, and immediately verify system behavior without manually
+  recreating gameplay conditions.
+  </p>
+
+  <p>
+  The assertions I added automate checks that would otherwise require repeated manual
+  verification. For example, the testing handler validates that assigned forest and
+  factory meeples never exceed the total meeple count and that production multipliers
+  remain logically valid. The helper validation functions also ensure that important
+  gameplay variables are never nil, negative, or the wrong data type during execution.
+  This infrastructure was especially useful while integrating the meeple interface system,
+  because the meeple system affected resource production, unlock progression, and
+  interface behavior simultaneously. The controlled test scenarios allowed me to
+  quickly reproduce game states and confirm that gameplay logic still behaved
+  correctly after interface and production changes were introduced.
+  </p>
+</section>
+
+</body>
+</html>
