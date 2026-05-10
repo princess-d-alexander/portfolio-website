@@ -47,6 +47,24 @@ pre {
   overflow-x: auto;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+figure {
+  margin: 1.5rem 0;
+}
+
+figcaption {
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 0.4rem;
+}
+
 code {
   font-family: Consolas, Monaco, monospace;
 }
