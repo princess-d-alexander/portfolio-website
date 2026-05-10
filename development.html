@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Development</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
 <nav>
   <a href="index.html">Home</a>
   <a href="development.html">Development</a>
@@ -8,11 +16,12 @@
 </nav>
 
 <h1>Development</h1>
+  
+<section>
+  <h2>Medium-Scale Abstraction</h2>
 
-<h2>Medium-Scale Abstraction</h2>
-
-<h3>Code Sample</h3>
-<pre><code>startDialogue = function(fileName, key)
+  <h3>Code Sample</h3>
+  <pre><code>startDialogue = function(fileName, key)
     DialogueHandler.TextBox =
         TextBox(0, 475, 800, 125, fileName, 0.1)
 
@@ -24,8 +33,7 @@
     end
 end,</code></pre>
 
-<pre><code>
-  if not DialogueHandler.Seen.firstWeapon then
+  <pre><code> if not DialogueHandler.Seen.firstWeapon then
     for _, weapon in pairs(WeaponItems) do
         if weapon.amt > 0 then
             DialogueHandler.startDialogue(
@@ -35,21 +43,17 @@ end,</code></pre>
             return
         end
     end
-end
-</code></pre>
+end </code></pre>
 
-<section>
-<h3>Where to Find My Work</h3>
-<p>
-This work can be found in the <strong>PaperGame</strong> repository, primarily in
-<code>handlers/dialogueHandler.lua</code> and portions of <code>main.lua</code>.
-The implementation was submitted through PR #122, “Add dialogue handler with conditionals.”
-Relevant sections include <code>dialogueHandler.lua</code> lines 24–128 and
-<code>main.lua</code> lines 52–55, 123, and 139.
+  <h3>Where to Find My Work</h3>
+  <p>
+  This work can be found in the <strong>PaperGame</strong> repository, primarily in
+  <code>handlers/dialogueHandler.lua</code> and portions of <code>main.lua</code>.
+  The implementation was submitted through PR #122, “Add dialogue handler with conditionals.”
+  Relevant sections include <code>dialogueHandler.lua</code> lines 24–128 and
+  <code>main.lua</code> lines 52–55, 123, and 139.
 </p>
-<section>
 
-<section>
 <h3>My Contributions</h3>
 <p>
 I implemented the reusable dialogue management system by expanding the original
@@ -60,9 +64,7 @@ triggering logic, and integrated dialogue behavior into the game loop. I also re
 previously repetitive conditional checks into reusable looping logic and revised the
 structure based on teammate pull request feedback.
 </p>
-<section>
 
-<section>
 <h3>Write-Up</h3>
 <p>
 The <code>DialogueHandler</code> demonstrates medium-scale abstraction because it
