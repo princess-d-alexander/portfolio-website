@@ -9,16 +9,76 @@
 
 <h1>Development</h1>
 
-<h2>Medium-scale Abstraction</h2>
+<h2>Medium-Scale Abstraction</h2>
 
-<h3>Location of Code</h3>
-<p>[Put repo link once Ian is done reviewing + file names + line numbers here]</p>
+<h3>Code Sample</h3>
+<pre><code>startDialogue = function(fileName, key)
+    DialogueHandler.TextBox =
+        TextBox(0, 475, 800, 125, fileName, 0.1)
 
-<h3>My Contribution</h3>
-<p>[What you wrote vs teammates]</p>
+    DialogueHandler.DrawTextBox = true
+    DialogueHandler.EndTextBox = false
 
-<h3>Explanation</h3>
-<p>[1–2 paragraphs answering the questions]</p>
+    if key ~= nil then
+        DialogueHandler.Seen[key] = true
+    end
+end,</code></pre>
+
+<pre><code>if not DialogueHandler.Seen.firstWeapon then
+    for _, weapon in pairs(WeaponItems) do
+        if weapon.amt > 0 then
+            DialogueHandler.startDialogue(
+                "firstWeapon.txt",
+                "firstWeapon"
+            )
+            return
+        end
+    end
+end</code></pre>
+
+<h3>Where to Find My Work</h3>
+<p>
+This work can be found in the <strong>PaperGame</strong> repository, primarily in
+<code>handlers/dialogueHandler.lua</code> and portions of <code>main.lua</code>.
+The implementation was submitted through PR #122, “Add dialogue handler with conditionals.”
+Relevant sections include <code>dialogueHandler.lua</code> lines 24–128 and
+<code>main.lua</code> lines 52–55, 123, and 139.
+</p>
+
+<h3>My Contributions</h3>
+<p>
+I implemented the reusable dialogue management system by expanding the original
+<code>DialogueHandler</code> stub that Aubrey and Ian started into a central handler
+for dialogue flow. I created the dialogue abstraction using <code>DialogueList</code>,
+implemented state tracking through the <code>Seen</code> table, added conditional
+triggering logic, and integrated dialogue behavior into the game loop. I also rewrote
+previously repetitive conditional checks into reusable looping logic and revised the
+structure based on teammate pull request feedback.
+</p>
+
+<h3>Write-Up</h3>
+<p>
+The <code>DialogueHandler</code> demonstrates medium-scale abstraction because it
+centralizes a full gameplay subsystem into a reusable handler instead of scattering
+dialogue logic throughout <code>main.lua</code>. Before the rewrite, dialogue progression
+depended on repeated hardcoded conditional statements. I replaced this with a
+<code>DialogueList</code> table containing reusable dialogue entries with shared
+properties such as <code>key</code>, <code>file</code>, and <code>condition</code>.
+The handler then loops through these entries using <code>pairs()</code> to determine
+when dialogue should appear. This reduces duplication and makes the system easier to
+extend because new dialogue events can be added by inserting another table entry rather
+than rewriting large conditional blocks.
+</p>
+
+<p>
+This abstraction also separates responsibilities across the codebase.
+<code>DialogueHandler</code> manages dialogue state, textbox progression, conditional
+dialogue triggers, and click behavior, while <code>main.lua</code> only calls the handler
+during update, draw, and input events. This separation improved readability and reduced
+coupling between gameplay logic and interface behavior. Revisions made through teammate
+feedback also helped ensure that the dialogue system behaved more consistently during
+normal gameplay and did not interfere with testing scenarios.
+</p>
 
 </body>
 </html>
