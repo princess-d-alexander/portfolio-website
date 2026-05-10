@@ -19,9 +19,28 @@
   
 <section>
   <h2>Medium-Scale Abstraction</h2>
+  
+  <h3>Where to Find My Work</h3>
+  <p>
+  This work can be found in the <strong>PaperGame</strong> repository, primarily in
+  <code>handlers/dialogueHandler.lua</code> and portions of <code>main.lua</code>.
+  The implementation was submitted through PR #122, “Add dialogue handler with conditionals.”
+  Relevant sections include <code>dialogueHandler.lua</code> lines 24–128 and
+  <code>main.lua</code> lines 52–55, 123, and 139.
+</p>
+
+<h3>My Contributions</h3>
+<p>
+I implemented the reusable dialogue management system by expanding the original
+<code>DialogueHandler</code> stub that Aubrey and Ian started into a central handler
+for dialogue flow. I created the dialogue abstraction using <code>DialogueList</code>,
+implemented state tracking through the <code>Seen</code> table, added conditional 
+logic, and integrated dialogue behavior into the game loop. I also rewrote
+previously repetitive conditional checks into reusable looping logic and revised the
+structure based on teammate pull request feedback.
+</p>
 
   <h3>Code Sample</h3>
-
   <p><strong>handlers/dialogueHandler.lua</strong></p>
   <pre><code>startDialogue = function(fileName, key)
     DialogueHandler.TextBox =
@@ -51,26 +70,6 @@ end </code></pre>
   <p><strong>main.lua</strong></p>
   <pre><code>DialogueHandler.updateText(dt)
   DialogueHandler.draw()</code></pre>
-
-  <h3>Where to Find My Work</h3>
-  <p>
-  This work can be found in the <strong>PaperGame</strong> repository, primarily in
-  <code>handlers/dialogueHandler.lua</code> and portions of <code>main.lua</code>.
-  The implementation was submitted through PR #122, “Add dialogue handler with conditionals.”
-  Relevant sections include <code>dialogueHandler.lua</code> lines 24–128 and
-  <code>main.lua</code> lines 52–55, 123, and 139.
-</p>
-
-<h3>My Contributions</h3>
-<p>
-I implemented the reusable dialogue management system by expanding the original
-<code>DialogueHandler</code> stub that Aubrey and Ian started into a central handler
-for dialogue flow. I created the dialogue abstraction using <code>DialogueList</code>,
-implemented state tracking through the <code>Seen</code> table, added conditional 
-logic, and integrated dialogue behavior into the game loop. I also rewrote
-previously repetitive conditional checks into reusable looping logic and revised the
-structure based on teammate pull request feedback.
-</p>
 
 <h3>Description</h3>
 <p>
