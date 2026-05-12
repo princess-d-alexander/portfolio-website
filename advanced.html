@@ -18,74 +18,184 @@
 <h1>Advanced Competencies</h1>
 
 <section>
-  <h2>Domain-Specific Architecture</h2>
+  <h2>Security: Threat Model Analysis</h2>
 
   <h3>Where to Find My Work</h3>
   <p>
-    This sample is located in the <strong>PaperGame</strong> repository in
-    <code>handlers/dialogueHandler.lua</code> and <code>main.lua</code>.
-    It was submitted through PR #122, “Add dialogue handler with conditionals.”
-    Relevant sections include <code>dialogueHandler.lua</code> lines 1–128 and
-    <code>main.lua</code> lines 52–55, 80–123, and 139.
+    This analysis is based on the <strong>PaperGame</strong> repository, especially
+    <code>main.lua</code>, <code>handlers/gameStateHandler.lua</code>,
+    <code>handlers/testingHandler.lua</code>, <code>handlers/perSecHandler.lua</code>,
+    and <code>handlers/dialogueHandler.lua</code>. These files handle user input,
+    save/load behavior, testing validation, production calculations, and dialogue state.
   </p>
 
   <h3>My Contributions</h3>
   <p>
-    I designed and implemented the architecture that integrates narrative dialogue
-    into the Love2D event-driven game loop. I built the
-    <code>DialogueHandler</code> subsystem, connected it to
-    <code>love.update(dt)</code>, <code>love.draw()</code>, and
-    <code>love.mousepressed()</code>, and implemented one-time dialogue triggers
-    tied to gameplay progress such as collecting wood, making paper, purchasing
-    weapons, unlocking meeples, and reaching prestige milestones.
+    I ran a threat model analysis on PaperQuest using the OWASP threat modeling process
+    and STRIDE categories. I focused on threats related to save-file tampering, invalid
+    gameplay states, progression bypassing, resource calculation errors, testing-mode
+    misuse, and repeated dialogue triggers. I also connected the analysis to code I worked
+    on, especially validation assertions, save-state tests, production checks, and dialogue
+    state tracking.
+  </p>
+
+  <h3>Surface Area</h3>
+  <p>
+    The main surface area of PaperQuest includes player mouse clicks, keyboard input,
+    save files, testing files, UI buttons, the sound slider, and the gameplay update loop.
+    Players interact with the system by clicking weapon buttons, factory buttons, meeple
+    buttons, testing buttons, help buttons, and dialogue textboxes. The game also reads
+    and writes local files such as <code>gameSaveData.txt</code> and testing save states,
+    which creates a security-relevant entry point because a user could manually edit those
+    files outside the game.
   </p>
 
   <h3>Code Samples</h3>
 
-  <p><strong>handlers/dialogueHandler.lua</strong></p>
-  <pre><code>updateText = function(dt)
-    DialogueHandler.checkConditions()
+  <p><strong>handlers/gameStateHandler.lua</strong></p>
+  <pre><code>local file = io.open(fileName, "r")
+if not file then
+    return
+end
 
-    if DialogueHandler.DrawTextBox then
-        DialogueHandler.TextBox:typeMessage(dt)
-    end
+Currencies.currentPaper = tonumber(file:read())
+Currencies.currentWood = tonumber(file:read())
+Currencies.pps = tonumber(file:read())
+Currencies.dps = tonumber(file:read())
+OtherItems.meeple.amt = tonumber(file:read())</code></pre>
+
+  <p><strong>handlers/testingHandler.lua</strong></p>
+  <pre><code>assertValidNonnegative = function(value, label)
+    assert(value ~= nil, label .. " should not be nil.")
+    assert(type(value) == "number", label .. " should be a number.")
+    assert(value >= 0, label .. " should never be negative.")
 end,</code></pre>
 
+  <p><strong>handlers/testingHandler.lua</strong></p>
+  <pre><code>assert(
+    forestMeeples + factoryMeeples <= totalMeeples,
+    "Assigned meeples should not exceed total meeples."
+)</code></pre>
+
+  <p><strong>handlers/perSecHandler.lua</strong></p>
+  <pre><code>calculatePaper = function(dt)
+    if (Currencies.currentWood >= Currencies.pps * dt * WOOD_TO_PAPER) then
+        Currencies.currentWood = Currencies.currentWood - (Currencies.pps * dt * WOOD_TO_PAPER)
+        Currencies.currentPaper = Currencies.currentPaper + (Currencies.pps * dt)
+    end
+end</code></pre>
+
   <p><strong>handlers/dialogueHandler.lua</strong></p>
-  <pre><code>if not DialogueHandler.Seen.firstMeeple and
-    OtherItems.meeple.amt &gt; 0 then
+  <pre><code>DialogueHandler.Seen[key] = true</code></pre>
 
-    DialogueHandler.startDialogue(
-        "firstMeeple.txt",
-        "firstMeeple"
-    )
-    return
-end</code></pre>
+  <h3>Threats and Triage</h3>
 
-  <p><strong>main.lua</strong></p>
-  <pre><code>if DialogueHandler.onClick() then
-    return
-end</code></pre>
+  <table>
+    <tr>
+      <th>Threat</th>
+      <th>Actor / Action / Attack / Asset / Objective</th>
+      <th>STRIDE Category</th>
+      <th>Triage</th>
+    </tr>
+
+    <tr>
+      <td>Save-file tampering</td>
+      <td>
+        A player edits <code>gameSaveData.txt</code> to change resource, meeple, weapon,
+        or prestige values in order to bypass normal progression.
+      </td>
+      <td>Tampering</td>
+      <td>
+        Mitigate. The testing handler already checks for nil, non-number, and negative
+        values. Given more time, I would add validation directly into the save/load system
+        and reject impossible states before they enter gameplay.
+      </td>
+    </tr>
+
+    <tr>
+      <td>Invalid meeple state</td>
+      <td>
+        A player or corrupted save file creates more assigned meeples than total meeples,
+        damaging the consistency of production calculations.
+      </td>
+      <td>Tampering / Denial of Service</td>
+      <td>
+        Mitigate. My assertions check that forest meeples plus factory meeples do not
+        exceed total meeples. This prevents impossible states from silently affecting
+        the game.
+      </td>
+    </tr>
+
+    <tr>
+      <td>Resource calculation abuse</td>
+      <td>
+        A malformed save or edge case causes paper production to exceed available wood,
+        allowing the player to generate paper without the required resource cost.
+      </td>
+      <td>Tampering</td>
+      <td>
+        Mitigate. <code>calculatePaper</code> checks whether enough wood exists before
+        producing paper. My production-limit test also checks that paper and wood remain
+        logically consistent.
+      </td>
+    </tr>
+
+    <tr>
+      <td>Testing-mode misuse</td>
+      <td>
+        A user enters testing mode and loads artificial save states, then exits testing
+        mode in a way that could affect normal gameplay progression.
+      </td>
+      <td>Elevation of Privilege</td>
+      <td>
+        Accept / partially mitigate. Testing mode is a developer-facing tool, not a feature
+        that players will interact with. The game saves before entering testing mode and reloads
+        the saved game when exiting testing mode, which reduces the risk of test states
+        replacing normal progress.
+      </td>
+    </tr>
+
+    <tr>
+      <td>Repeated dialogue triggers</td>
+      <td>
+        A progression condition remains true every frame and repeatedly triggers the same
+        dialogue, interrupting gameplay or making the interface unusable.
+      </td>
+      <td>Denial of Service</td>
+      <td>
+        Mitigate. <code>DialogueHandler.Seen</code> tracks which dialogue events have
+        already appeared so each event only happens once.
+      </td>
+    </tr>
+  </table>
 
   <h3>Description</h3>
   <p>
-    This code demonstrates domain-specific architecture because the structure of
-    the system is shaped by the needs of our idle game built in Love2D.
-    Unlike a standard application, PaperQuest continuously runs through update and
-    draw cycles while checking player progress in real time. The dialogue system
-    therefore needed to support narrative events that could appear dynamically when
-    players reached milestones without interrupting the game loop.
+    I used the OWASP threat modeling process by first scoping the system, identifying
+    entry points, and listing assets that need protection. For PaperQuest, the most
+    important assets are valid save data, resource values, progression state, meeple
+    assignments, unlock conditions, and stable gameplay. The largest risks come from
+    local file editing because the game stores progress in plain text and loads values
+    directly into gameplay variables.
   </p>
 
   <p>
-    The architecture solves the problem of coordinating gameplay progression with
-    narrative pacing. In an idle game, values can update every frame, so dialogue
-    prompts cannot simply check conditions repeatedly without tracking whether they
-    have already appeared. I solved this by using the <code>Seen</code> table to
-    track completed dialogue events and condition checks tied to gameplay state.
-    The handler fits Love2D’s structure by updating text in <code>love.update</code>,
-    drawing dialogue in <code>love.draw</code>, and handling clicks through
-    <code>love.mousepressed</code>.
+    The strongest threats are tampering and invalid state creation. A player could edit
+    save data to create impossible values, bypass progression, or crash the game by
+    loading nil or nonnumeric values. The current project partially mitigates these
+    risks through validation assertions, production checks, and scenario-based regression
+    tests. These checks make sure values are not nil, are numeric, are nonnegative, and
+    follow important gameplay rules such as assigned meeples not exceeding total meeples.
+  </p>
+
+  <p>
+    The analysis also shows where the project falls short. The testing system catches
+    invalid states during test mode, but the main save/load system still trusts the save
+    file too much. Given more time, I would move the validation checks into
+    <code>StateHandler.loadGame</code> so corrupted or edited save files are rejected
+    before they affect gameplay. I would also replace the positional save format with
+    labeled fields, add default fallback values for missing data, and separate developer
+    testing tools from normal player-facing gameplay.
   </p>
 </section>
 
