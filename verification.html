@@ -76,12 +76,55 @@
     )</code></pre>
 
   <h3>Description</h3>
+  
+  <h3>Testing Interface Screenshots</h3>
+
+<p>
+The screenshots below show the in-game testing mode used to load
+scenario-based save states and validate gameplay behavior.
+</p>
+
+<img src="images/testing_mode.png"
+     alt="Testing mode interface"
+     width="700">
+
+<p>
+Testing mode allows predefined save-state scenarios to be loaded
+directly through clickable buttons inside the game.
+</p>
+
+<img src="images/PrincessMeepleUITest.png"
+     alt="Meeple UI test running"
+     width="700">
+
+<p>
+This test validates that meeple assignments remain logically valid
+and that production systems continue functioning correctly.
+</p>
+
+<img src="images/Negative_Regression_Test.png"
+     alt="Negative regression test"
+     width="700">
+
+<p>
+This regression test verifies that empty or new-game states do not
+produce invalid negative or nil values.
+</p>
+
+<img src="images/Production_Limit_Test.png"
+     alt="Production limit test"
+     width="700">
+
+<p>
+This production limit test verifies that paper production cannot
+exceed the available wood supply.
+</p>
 
   <p>
   The component I tested was the meeple progression and production system. Meeples are
   worker units assigned either to the forest or the factory, so they directly affect wood
   production, paper production, and overall gameplay. The tests I created are
-  scenario-based regression tests that consider predefined save states and verify that the
+  scenario-based regression tests that use predefined save states and verify that the
   game still behaves correctly after new systems or interface changes are added. Each test
   file stores a complete gameplay state as numerical values loaded at runtime. For example,
   in <code>PrincessMeepleUITest.txt</code>, the values <code>3</code>, <code>2</code>,

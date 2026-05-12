@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Advanced</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
 <nav>
   <a href="index.html">Home</a>
   <a href="development.html">Development</a>
@@ -6,3 +14,213 @@
   <a href="engineering.html">Engineering</a>
   <a href="advanced.html">Advanced</a>
 </nav>
+
+<h1>Advanced Competencies</h1>
+
+<section>
+  <h2>Domain-Specific Architecture</h2>
+
+  <h3>Where to Find My Work</h3>
+  <p>
+    This sample is located in the <strong>PaperGame</strong> repository in
+    <code>handlers/dialogueHandler.lua</code> and <code>main.lua</code>.
+    It was submitted through PR #122, “Add dialogue handler with conditionals.”
+    Relevant sections include <code>dialogueHandler.lua</code> lines 1–128 and
+    <code>main.lua</code> lines 52–55, 80–123, and 139.
+  </p>
+
+  <h3>My Contributions</h3>
+  <p>
+    I designed and implemented the architecture that integrates narrative dialogue
+    into the Love2D event-driven game loop. I built the
+    <code>DialogueHandler</code> subsystem, connected it to
+    <code>love.update(dt)</code>, <code>love.draw()</code>, and
+    <code>love.mousepressed()</code>, and implemented one-time dialogue triggers
+    tied to gameplay progress such as collecting wood, making paper, purchasing
+    weapons, unlocking meeples, and reaching prestige milestones.
+  </p>
+
+  <h3>Code Samples</h3>
+
+  <p><strong>handlers/dialogueHandler.lua</strong></p>
+  <pre><code>updateText = function(dt)
+    DialogueHandler.checkConditions()
+
+    if DialogueHandler.DrawTextBox then
+        DialogueHandler.TextBox:typeMessage(dt)
+    end
+end,</code></pre>
+
+  <p><strong>handlers/dialogueHandler.lua</strong></p>
+  <pre><code>if not DialogueHandler.Seen.firstMeeple and
+    OtherItems.meeple.amt &gt; 0 then
+
+    DialogueHandler.startDialogue(
+        "firstMeeple.txt",
+        "firstMeeple"
+    )
+    return
+end</code></pre>
+
+  <p><strong>main.lua</strong></p>
+  <pre><code>if DialogueHandler.onClick() then
+    return
+end</code></pre>
+
+  <h3>Description</h3>
+  <p>
+    This code demonstrates domain-specific architecture because the structure of
+    the system is shaped by the needs of our idle game built in Love2D.
+    Unlike a standard application, PaperQuest continuously runs through update and
+    draw cycles while checking player progress in real time. The dialogue system
+    therefore needed to support narrative events that could appear dynamically when
+    players reached milestones without interrupting the game loop.
+  </p>
+
+  <p>
+    The architecture solves the problem of coordinating gameplay progression with
+    narrative pacing. In an idle game, values can update every frame, so dialogue
+    prompts cannot simply check conditions repeatedly without tracking whether they
+    have already appeared. I solved this by using the <code>Seen</code> table to
+    track completed dialogue events and condition checks tied to gameplay state.
+    The handler fits Love2D’s structure by updating text in <code>love.update</code>,
+    drawing dialogue in <code>love.draw</code>, and handling clicks through
+    <code>love.mousepressed</code>.
+  </p>
+</section>
+
+<section>
+  <h2>User Interface Design</h2>
+
+  <h3>Where to Find My Work</h3>
+  <p>
+    This sample is located in the <strong>PaperQuest</strong> repository in
+    <code>handlers/drawingHandler.lua</code>, <code>ui_list.lua</code>, and
+    <code>items_list.lua</code>. Relevant sections include
+    <code>drawingHandler.lua</code> lines 49–118,
+    <code>items_list.lua</code> lines 32–36, and
+    <code>ui_list.lua</code> lines 22–30.
+  </p>
+
+  <h3>Visual Samples</h3>
+
+  <figure>
+    <img src="images/early-ui.png" alt="Early sprint UI layout">
+    <figcaption>Earlier interface before the meeple system and final layout revisions.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="images/final-ui.png" alt="Final UI redesign">
+    <figcaption>Final interface with clearer grouping, meeple panels, and revised resource layout.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="images/asset_buttons.png" alt="Canva UI button assets">
+    <figcaption>Button and interface assets I created in Canva for the redesigned layout.</figcaption>
+  </figure>
+
+  <h3>My Contributions</h3>
+  <p>
+    I redesigned a major portion of the game interface during the meeple integration
+    sprint. I created custom UI assets in Canva, redesigned the visual hierarchy,
+    repositioned resource information, grouped related mechanics spatially, and
+    updated the rendering logic so interface elements appeared in the correct
+    locations as gameplay systems unlocked.
+  </p>
+
+  <h3>Code Samples</h3>
+
+  <p><strong>drawingHandler.lua</strong></p>
+  <pre><code>if (OtherItemButtons.meeple.visible) then
+    love.graphics.draw(UI.meepleCost, 250, 246)
+    love.graphics.draw(UI.meepleFactoryCount, 264, 362)
+    love.graphics.draw(UI.meepleForestCount, 685, 362)
+end</code></pre>
+
+  <p><strong>drawingHandler.lua</strong></p>
+  <pre><code>love.graphics.print(
+    tostring(OtherItems.meeple.factoryAmt),
+    291, 428, 0, 1.05, 1.05
+)
+
+love.graphics.print(
+    tostring(OtherItems.meeple.forestAmt),
+    712, 428, 0, 1.05, 1.05
+)</code></pre>
+
+  <p><strong>items_list.lua</strong></p>
+  <pre><code>factory = OtherItemButton(
+    390, 348,
+    150, 275,
+    "Factory",
+    true,
+    OtherItems.factory
+),</code></pre>
+
+  <h3>Description</h3>
+  <p>
+    The redesign follows interaction design principles including visual hierarchy,
+    grouping, consistency, and progressive disclosure. In the earlier interface,
+    important gameplay information was spread unevenly across the screen, which made
+    it harder to understand which systems belonged together. In the final design,
+    the forest area corresponds to wood harvesting, the factory area corresponds to
+    paper production, and the meeple system has its own green panels and visual
+    indicators. This grouping makes the interface easier to scan and understand.
+  </p>
+
+  <p>
+    I considered keeping the meeple system inside the original factory and forest
+    buttons, but that made the interface feel crowded and made the clickable regions
+    less clear. The final design worked better because it separated resource
+    production, meeple management, and passive information into clearer zones while
+    preserving the game’s hand-drawn visual style. Since Love2D does not provide a
+    built-in layout system, I also had to manually position images, text, and hitboxes
+    so the visual design and interaction areas matched.
+  </p>
+</section>
+
+<section>
+  <h2>Engineering Quality</h2>
+
+  <h3>Where to Find My Work</h3>
+  <p>
+    This evaluation refers to the overall <strong>PaperGame</strong> codebase,
+    especially <code>main.lua</code>, <code>ui_list.lua</code>,
+    <code>items_list.lua</code>, <code>handlers/dialogueHandler.lua</code>,
+    <code>handlers/gameStateHandler.lua</code>,
+    <code>handlers/perSecHandler.lua</code>,
+    <code>handlers/drawingHandler.lua</code>, and
+    <code>handlers/testingHandler.lua</code>.
+  </p>
+
+  <h3>Description</h3>
+  <p>
+    Overall, the codebase shows strong engineering quality because it is organized
+    around clear responsibilities instead of placing all game logic in one file.
+    The project separates assets, classes, handlers, and state files into different
+    areas, which makes the structure easier to navigate as the game grows.
+    <code>main.lua</code> acts mostly as the entry point: it loads dependencies,
+    handles input, runs the update loop, and delegates work to handlers such as
+    <code>StateHandler</code>, <code>DrawingHandler</code>,
+    <code>TestingHandler</code>, <code>DialogueHandler</code>, and
+    <code>SoundHandler</code>. This is strong engineering because each major system
+    has a clear role.
+  </p>
+
+  <p>
+    The codebase also demonstrates quality through reusable patterns. Assets are
+    centralized in <code>ui_list.lua</code>, game objects and buttons are centralized
+    in <code>items_list.lua</code>, and production calculations are isolated in
+    <code>perSecHandler.lua</code>. Many objects are stored in tables and processed
+    with loops, which reduces repeated code. However, the codebase still falls short
+    in places where hard-coded values and repeated conditionals remain. For example,
+    some unlock logic could be moved into structured tables, and the save/load system
+    would be stronger if it used labeled data instead of relying on exact line order.
+    Given more time, I would improve the codebase by replacing fragile save files
+    with named fields, organizing unlock rules into reusable structures, and expanding
+    the testing system to cover more progression and UI behavior.
+  </p>
+</section>
+
+</body>
+</html>
