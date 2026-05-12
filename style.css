@@ -73,3 +73,19 @@ figcaption {
 code {
   font-family: Consolas, Monaco, monospace;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  vertical-align: top;
+}
+
+th {
+  background: #f0e6dc;
+}
