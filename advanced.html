@@ -32,7 +32,8 @@
   <h3>My Contributions</h3>
   <p>
     I ran a threat model analysis on PaperQuest using the OWASP threat modeling process
-    and STRIDE categories. I focused on threats related to save-file tampering, invalid
+    and <a href="https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats" target="_blank">
+    Microsoft's STRIDE threat model </a>. I focused on threats related to save-file tampering, invalid
     gameplay states, progression bypassing, resource calculation errors, testing-mode
     misuse, and repeated dialogue triggers. I also connected the analysis to code I worked
     on, especially validation assertions, save-state tests, production checks, and dialogue
@@ -171,12 +172,15 @@ end</code></pre>
 
   <h3>Description</h3>
   <p>
-    I used the OWASP threat modeling process by first scoping the system, identifying
-    entry points, and listing assets that need protection. For PaperQuest, the most
-    important assets are valid save data, resource values, progression state, meeple
-    assignments, unlock conditions, and stable gameplay. The largest risks come from
-    local file editing because the game stores progress in plain text and loads values
-    directly into gameplay variables.
+    I used the <a href="https://owasp.org/www-community/Threat_Modeling_Process" target="_blank">
+    OWASP Threat Modeling Process </a> by first scoping the system, identifying entry points, and 
+    listing assets that need protection. I also used the Carnegie Mellon SEI threat-scenario structure of 
+    ACTOR, ACTION, ATTACK, ASSET, EFFECT, and OBJECTIVE to describe how attacks could affect PaperQuest.
+    <a href="https://www.sei.cmu.edu/blog/stop-imagining-threats-start-mitigating-them-a-practical-guide-to-threat-modeling/" target="_blank">
+      (SEI Threat Modeling Guide)</a> 
+    For PaperQuest, the most important assets are valid save data, resource values, progression state, 
+    meeple assignments, unlock conditions, and stable gameplay. The largest risks come from local file 
+    editing because the game stores progress in plain text and loads values directly into gameplay variables.
   </p>
 
   <p>
@@ -331,6 +335,28 @@ love.graphics.print(
     the testing system to cover more progression and UI behavior.
   </p>
 </section>
+
+<h3>References</h3>
+
+<ul>
+  <li>
+    <a href="https://owasp.org/www-community/Threat_Modeling_Process" target="_blank">
+      OWASP Threat Modeling Process
+    </a>
+  </li>
+
+  <li>
+    <a href="https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats" target="_blank">
+      Microsoft STRIDE Threat Categories
+    </a>
+  </li>
+
+  <li>
+    <a href="https://www.sei.cmu.edu/blog/stop-imagining-threats-start-mitigating-them-a-practical-guide-to-threat-modeling/" target="_blank">
+      Carnegie Mellon SEI Practical Guide to Threat Modeling
+    </a>
+  </li>
+</ul>
 
 </body>
 </html>
